@@ -4,7 +4,7 @@ import * as ImagenesModel from "../Modelos/ImagenesModel.js";
 
 export const crearPost = async (req, res) => {
     try {
-        const { titulo, descripcion, precio, status, location, idUsuario, } = req.body;
+        const { titulo, descripcion, precio, status, location, idUsuario, imagenes } = req.body;
 
         const errores = []
 
@@ -24,7 +24,7 @@ export const crearPost = async (req, res) => {
             errores.push("location");
         }
 
-        if (!req.files || req.files.length <= 0) {
+        if (!req.body.imagenes || imagenes.length <= 0) {
             errores.push("Imagenes")
         }
 
@@ -35,21 +35,22 @@ export const crearPost = async (req, res) => {
         }else{
 
             const response = await PostModel.crear(idUsuario, titulo, descripcion, precio, status, location)
-            for (const file of req.files) {
-                await ImagenesModel.cargar(response[0][0].idPost, file.buffer);
+            for (const file of imagenes) {
+                await ImagenesModel.cargar(response[0][0].idPost, file);
             }
 
             res.status(200).json({success: true, msg: "Se guardo con exito"})
         }
 
     } catch (error) {
-        res.status(500).json({success: false, msg: error, errors: []})
+        console.log(error)
+        res.status(500).json({success: false, msg: "Error en el servidor", errors: []})
     }
 };
 
 export const editarPost = async (req, res) => {
     try {
-        const {titulo, descripcion, precio, status, location, idPost } = req.body;
+        const {titulo, descripcion, precio, status, location, idPost, imagenes } = req.body;
 
         const errores = []
 
@@ -76,14 +77,13 @@ export const editarPost = async (req, res) => {
 
             const response = await PostModel.actualizar(idPost, titulo, descripcion, precio, status, location)
 
-            if (!req.files || req.files.length <= 0) {
+            if (!req.body.imagenes || imagenes.length <= 0) {
                 res.status(200).json({success: true, msg: "Se actualizo el post"})
             }else{
                 await ImagenesModel.eliminarAntiguos(idPost)
 
-                for (const file of req.files) {
-                    const image = file.buffer;
-                    await ImagenesModel.cargar(idPost, image);
+                for (const file of imagenes) {
+                    await ImagenesModel.cargar(idPost, file);
                 }
 
                 res.status(200).json({success: true, msg: "Se actualizo el post"})

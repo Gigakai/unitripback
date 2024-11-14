@@ -3,10 +3,11 @@ import * as UsuarioModel from "../Modelos/UsuarioModel.js";
 
 export const registerUser = async (req, res) => {
     try {
-        if (!req.file) {
-            return res.status(400).json({success: false, msg:'No se ha enviado ningún archivo.',  errors: []});
+        if (!req.body.profilePic || !req.body.profilePic.startsWith("data:image")) {
+            return res.status(400).json({success: false, msg:'No se ha enviado ningún archivo.',  errors: ["profilePic"]});
         }
-        const {email, password, nombre, apellido, username, direccion, telefono} = req.body
+
+        const {email, password, nombre, apellido, username, direccion, telefono, profilePic} = req.body
         const duplicate = await UsuarioModel.duplicado(email)
 
         if(duplicate[0][0].existe > 0){
@@ -41,7 +42,6 @@ export const registerUser = async (req, res) => {
             if(errores.length > 0){
                 res.status(400).json({ success: false, msg: "Error en los parametros", errors: errores })
             }else{
-                const profilePic = req.file.buffer
                 const response = await UsuarioModel.agregar(email, password, nombre, apellido, username, direccion, telefono, profilePic)
                 const usuarioActual = await UsuarioModel.logIn(email)
                 res.status(200).json({ success: true, msg: "Usuario registrado con exito", data: usuarioActual[0][0]})
@@ -80,6 +80,7 @@ export const updateUser = async (req, res) =>{
         const {idUsuario, email, username, password, phone} = req.body
 
         const response = await UsuarioModel.logIn(email)
+
         if(response[0].length > 0){
             const errores = []
 
@@ -119,11 +120,12 @@ export const updateUser = async (req, res) =>{
 
 export const updateUserPhoto = async (req, res) =>{
     try {
-        const {idUsuario, email, username, password, phone} = req.body
 
-        if (!req.file) {
+        if (!req.body.profilePic || !req.body.profilePic.startsWith("data:image")) {
             return res.status(400).json({success: false, msg:'No se ha enviado ningún archivo.', errors: []});
         }
+
+        const {idUsuario, email, username, password, phone, profilePic} = req.body
 
         const response = await UsuarioModel.logIn(email)
         if(response[0].length > 0){
@@ -148,7 +150,6 @@ export const updateUserPhoto = async (req, res) =>{
             if(errores.length > 0){
                 res.status(400).json({ success: false, msg: "Error en los parametros", errors: errores })
             }else{
-                const profilePic = req.file.buffer
                 await UsuarioModel.actualizarPhoto(idUsuario, password, username, phone, profilePic)
                 const updatedUser = await UsuarioModel.logIn(email)
                 res.status(200).json({ success: true, msg: "Usuario Actualizado", data: updatedUser[0][0] })

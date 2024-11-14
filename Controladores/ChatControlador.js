@@ -31,7 +31,6 @@ export const crearChat = async (req, res) => {
     }
 };
 
-
 export const enviarMensaje = async (req, res) => {
     try {
         const {idSender, msg, idChat} = req.body
