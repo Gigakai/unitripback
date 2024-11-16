@@ -55,20 +55,22 @@ export const registerUser = async (req, res) => {
 
 
 export const logIn = async (req, res) =>{
-    try {
-        const {email, password} = req.body
+    const {email, password} = req.body
 
-        const response = await UsuarioModel.logIn(email)
-        if(response[0].length > 0){
-            if(password === response[0][0].password){
-                res.status(200).json({ success: true, msg: "Usuario loggeado", data: response[0][0] })
-            }else{
-                res.status(400).json({ success: false, msg: "Error de credenciales" })
-            }
-
+    const response = await UsuarioModel.logIn(email)
+    if(response[0].length > 0){
+        if(password === response[0][0].password){
+            res.status(200).json({ success: true, msg: "Usuario loggeado", data: response[0][0] })
         }else{
-            res.status(400).json({ success: false, msg: "No existe dicho usuario" })
+            res.status(400).json({ success: false, msg: "Error de credenciales" })
         }
+
+    }else{
+        res.status(400).json({ success: false, msg: "No existe dicho usuario" })
+    }
+
+    try {
+
     }catch (error) {
         res.status(500).json({ success: false, msg: error })
     }
