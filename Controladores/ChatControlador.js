@@ -21,7 +21,7 @@ export const crearChat = async (req, res) => {
 
             res.status(200).json({
                 success: true,
-                msg: "Ya existe el chat",
+                msg: "E",
                 data: {chatInfo: chatInfo[0][0], mensajes: mensajes[0]}
             })
         }
