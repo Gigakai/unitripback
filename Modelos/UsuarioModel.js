@@ -87,9 +87,39 @@ export const syncUsuarios = (fechaSync) => {
     })
 }
 
+
+export const syncUsuariosUpdated = (fechaSync) => {
+    return new Promise((resolve, reject) => {
+        const sqlQuery = 'CALL sp_Sync(2, ?)'
+        connection.query(sqlQuery, [fechaSync], (err, result) => {
+            if (err) {
+                console.log("Error")
+                reject(err);
+            }else {
+                resolve(result);
+            }
+        })
+    })
+}
+
+
 export const syncPosts = (fechaSync) => {
     return new Promise((resolve, reject) => {
         const sqlQuery = 'CALL sp_Sync(5, ?)'
+        connection.query(sqlQuery, [fechaSync], (err, result) => {
+            if (err) {
+                console.log("Error")
+                reject(err);
+            }else {
+                resolve(result);
+            }
+        })
+    })
+}
+
+export const syncPostsUpdated = (fechaSync) => {
+    return new Promise((resolve, reject) => {
+        const sqlQuery = 'CALL sp_Sync(6, ?)'
         connection.query(sqlQuery, [fechaSync], (err, result) => {
             if (err) {
                 console.log("Error")

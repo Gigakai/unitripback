@@ -189,3 +189,22 @@ export const sync = async (req, res) => {
         res.status(500).json({success: false, msg: error, errors: []})
     }
 };
+
+
+export const syncUpdated = async (req, res) => {
+    try {
+        const {fechaSync} = req.params
+
+        const posts = await UsuarioModel.syncPostsUpdated(fechaSync)
+        const usuarios = await UsuarioModel.syncUsuariosUpdated(fechaSync)
+
+        res.status(200).json({success: true,
+            msg: "Se obtuvo con exito",
+            posts: posts[0],
+            usuarios: usuarios[0],
+        })
+
+    } catch (error) {
+        res.status(500).json({success: false, msg: error, errors: []})
+    }
+};
