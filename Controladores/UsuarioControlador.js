@@ -172,14 +172,14 @@ export const sync = async (req, res) => {
     try {
         const {fechaSync} = req.params
 
-        const posts = await UsuarioModel.syncPosts(fechaSync)
+        //const posts = await UsuarioModel.syncPosts(fechaSync) posts: posts[0],
         const chats = await UsuarioModel.syncChats(fechaSync)
         const mensajes = await UsuarioModel.syncMensajes(fechaSync)
         const usuarios = await UsuarioModel.syncUsuarios(fechaSync)
 
         res.status(200).json({success: true,
             msg: "Se obtuvo con exito",
-            posts: posts[0],
+
             chats: chats[0],
             mensajes: mensajes[0],
             usuarios: usuarios[0],
