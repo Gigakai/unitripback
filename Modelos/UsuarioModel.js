@@ -72,6 +72,65 @@ export const duplicado = (email) => {
 }
 
 
+//Sincronizar
+export const syncUsuarios = (fechaSync) => {
+    return new Promise((resolve, reject) => {
+        const sqlQuery = 'CALL sp_Sync(1, ?)'
+        connection.query(sqlQuery, [fechaSync], (err, result) => {
+            if (err) {
+                console.log("Error")
+                reject(err);
+            }else {
+                resolve(result);
+            }
+        })
+    })
+}
+
+export const syncPosts = (fechaSync) => {
+    return new Promise((resolve, reject) => {
+        const sqlQuery = 'CALL sp_Sync(5, ?)'
+        connection.query(sqlQuery, [fechaSync], (err, result) => {
+            if (err) {
+                console.log("Error")
+                reject(err);
+            }else {
+                resolve(result);
+            }
+        })
+    })
+}
+
+export const syncMensajes = (fechaSync) => {
+    return new Promise((resolve, reject) => {
+        const sqlQuery = 'CALL sp_Sync(4, ?)'
+        connection.query(sqlQuery, [fechaSync], (err, result) => {
+            if (err) {
+                console.log("Error")
+                reject(err);
+            }else {
+                resolve(result);
+            }
+        })
+    })
+}
+
+export const syncChats = (fechaSync) => {
+    return new Promise((resolve, reject) => {
+        const sqlQuery = 'CALL sp_Sync(3, ?)'
+        connection.query(sqlQuery, [fechaSync], (err, result) => {
+            if (err) {
+                console.log("Error")
+                reject(err);
+            }else {
+                resolve(result);
+            }
+        })
+    })
+}
+
+
+
 
 
 

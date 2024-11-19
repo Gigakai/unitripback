@@ -13,4 +13,5 @@ router.get("/getPosts/:idUsuario", obtenerPosts)
 router.get("/getPost/:idPost", getPost)
 
 
+
 export default router;
