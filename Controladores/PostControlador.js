@@ -105,7 +105,6 @@ export const deletePost = async (req, res) => {
             return res.status(400).json({ success: false, msg: "Error en los parametros", errors: [] })
         }
 
-        await ImagenesModel.eliminarAntiguos(idPost)
         await PostModel.eliminar(idPost)
 
 
